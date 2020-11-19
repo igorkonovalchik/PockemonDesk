@@ -1,65 +1,79 @@
-let question = prompt('Привет! Введи "1" и я смогу вычислить в какой фразе больше того или иого символа или "2" и я приведу номер мобильного к формату +7 (123) 456-78-90! Выбираай?')
+const $btnKick = document.getElementById('btn-kick');
+const $btnUppercut = document.getElementById('btn-uppercut');
+const $bloodscreen = document.getElementById('bloodscreen');
 
-switch (question) {
-  case '1':
-    const askRow = (row) => {
-      const question = confirm(`Предлагаю строку - "${row}"! Пойдет? Для ввода своей строки нажми отмена!`);
-      if(question){ return row; }else{ return prompt('Введите свою строку'); }
-    }
-    const firstRow = askRow('мама мыла раму');
-    const secondRow = askRow('собака друг человека');
-    const symbol = prompt('Какой символ будем искать?');
-  
-    function getRow(firstRow, secondRow, symbol) {
-      const quantityOfSymbol = (str, symbol = 'а') => {
-        let quantity = 0;
-        for (let i = 0; i < str.length; i++) {
-          if (str.charAt(i) === symbol) {
-            quantity++;
-          };
-        }
-        return quantity;
-      };
-      return quantityOfSymbol(firstRow, symbol) > quantityOfSymbol(secondRow, symbol) ? firstRow : secondRow;
-    }
-    alert(`Больше всего символа ${symbol} в фразе "${getRow(firstRow, secondRow, symbol)}"`);
-  break;
-
-  case '2':
-    const phone = prompt('Введите номер телефона в формате +71234567890');
-    if (phone.charAt(0) !== '+' || phone.length !== 12) {
-      alert('Что-то ты не то ввел! Попробуй еще раз!');
-      location.reload();
-    } else {
-      function formattedPhone(phone) {
-        let result = '';
-        for (let i = 0; i < phone.length; i++) {
-          switch (i) {
-            case 2:
-              result = result + ' (';
-              break;
-            case 5:
-              result = result + ') ';
-              break;
-            case 8:
-              result = result + '-';
-              break;
-            case 10:
-              result = result + '-';
-              break;
-            default:
-              break;
-          };
-          result = result + phone.charAt(i);
-        }
-        return result;
-      }
-      alert(`Пожалуйста!  ${formattedPhone(phone)}`);
-      };
-  break;
-
-  default:
-    alert('Что-то ты не то ввел! Попробуй еще раз!');
-    location.reload();
-  break;
+const character = {
+  name: 'Pikachu',
+  defaultHP: 100,
+  damageHP: 100,
+  elHP: document.getElementById('health-character'),
+  elProgressbar: document.getElementById('progressbar-character')
 };
+
+const enemy = {
+  name: 'Charmander',
+  defaultHP: 100,
+  damageHP: 100,
+  elHP: document.getElementById('health-enemy'),
+  elProgressbar: document.getElementById('progressbar-enemy')
+};
+
+$btnKick.addEventListener('click', function () {
+  console.log('kick');
+  changeHP(rundom(rundom(10)), character);
+  changeHP(rundom(rundom(10)), enemy);
+});
+
+$btnUppercut.addEventListener('click', function () {
+  console.log('uppercut');
+  changeHP(rundom(rundom(50)), character);
+  changeHP(rundom(rundom(50)), enemy);
+});
+
+function init() {
+  console.log('Start Game!');
+  renderHP(character);
+  renderHP(enemy);
+};
+
+function renderHP(person) {
+  renderHPLife(person);
+  renderProgressbarHP(person);
+}
+
+
+function renderHPLife(person) {
+  console.log(person.elHP.innerText);
+  person.elHP.innerText = person.damageHP + ' / ' + person.defaultHP;
+}
+
+function renderProgressbarHP(person) {
+  person.elProgressbar.style.width = person.damageHP + '%';
+}
+
+function changeHP(count, person) {
+  if (person.damageHP < count) {
+    person.damageHP = 0;
+    alert(`Бедный ${person.name}! Ты умер! Игра окончена!`);
+    $bloodscreen.style.opacity = 100;
+    $btnKick.disabled = true;
+    $btnUppercut.disabled = true;
+  } else {
+    person.damageHP -= count;
+  };
+  renderHP(person);
+  bloodscreen(count)
+}
+
+function rundom(num = 20) {
+  return Math.ceil(Math.random() * num);
+}
+
+function bloodscreen(opacity) {
+  $bloodscreen.style.opacity = opacity / 10;
+  setTimeout(() => {
+    $bloodscreen.style.opacity = 0;
+  }, 300);
+};
+
+init();
