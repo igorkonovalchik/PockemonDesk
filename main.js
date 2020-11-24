@@ -1,6 +1,10 @@
 const $getElByID = (el) => document.getElementById(el);
 const $btnKick = $getElByID('btn-kick');
 const $btnUppercut = $getElByID('btn-uppercut');
+const maxKick = 6;
+const maxUppercut = 6;
+const kickCounter = clickCounter( $btnKick, maxKick);
+const uppercutCounter = clickCounter( $btnUppercut, maxUppercut);
 const $bloodscreen = $getElByID('bloodscreen');
 
 const character = {
@@ -27,24 +31,32 @@ const enemy = {
   changeHP: changeHP
 };
 
-
-$btnKick.addEventListener('click', function () {
-  // console.log('kick');
-  character.changeHP(rundom(rundom(10)));
-  enemy.changeHP(rundom(rundom(10)));
-});
-
-$btnUppercut.addEventListener('click', function () {
-  // console.log('uppercut');
-  character.changeHP(rundom(rundom(50)));
-  enemy.changeHP(rundom(rundom(50)));
-});
+/* ---------- Инит ----------- */ 
 
 function init() {
   console.log('Start Game!');
   character.renderHP();
   enemy.renderHP();
 };
+
+/* ---------- Кнопки ----------- */ 
+
+
+$btnKick.addEventListener('click', function () {
+  // console.log('kick');
+  character.changeHP(rundom(rundom(10)));
+  enemy.changeHP(rundom(rundom(10)));
+  kickCounter();  
+});
+
+$btnUppercut.addEventListener('click', function () {
+  // console.log('uppercut');
+  character.changeHP(rundom(rundom(50)));
+  enemy.changeHP(rundom(rundom(50)));
+  uppercutCounter();
+});
+
+/* ---------- Обновление жизней ----------- */ 
 
 function renderHP() {
   this.renderHPLife();
@@ -60,6 +72,8 @@ function renderProgressbarHP() {
   const percent = ( this.damageHP * 100 ) / this.defaultHP; 
   this.elProgressbar.style.width = percent + '%';
 }
+
+/* ---------- Изменение жизней ----------- */ 
 
 function changeHP(count) {
   if (character.damageHP !== 0 && enemy.damageHP !== 0) {
@@ -79,6 +93,8 @@ function changeHP(count) {
   };
 };
 
+/* ---------- Вспомогательные функции ----------- */ 
+
 function rundom(num = 20) {
   return Math.ceil(Math.random() * num);
 }
@@ -91,6 +107,8 @@ function bloodscreen(opacity) {
     };
   }, 300);
 };
+
+/* ---------- Логи ----------- */ 
 
 const generateLogs = (firstPerson, secondPerson, count) => {
 
@@ -139,5 +157,21 @@ const generateLogs = (firstPerson, secondPerson, count) => {
   };
 
 };
+
+/* ---------- Счетчик нажатий ----------- */ 
+
+function clickCounter( hit, maxHit = 10 ) {
+  let a = 0;
+  const nameHit = hit.id.slice( 4, hit.id.length );
+	return function ( ) {    
+    if( a < maxHit ){      
+      console.log(`You ${nameHit} ${a += 1} times. ${ maxHit - a } hits left. `);
+    }else{
+      hit.disabled = true;
+      console.log(`Spent all ${nameHit}. Try another hit. `);
+    }		
+	}
+}
+
 
 init();
