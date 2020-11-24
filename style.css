@@ -8,7 +8,6 @@ html, body {
 }
 
 body {
-   
     color: black;
     position: relative;
     background: red;
@@ -33,7 +32,63 @@ body {
   z-index: 999;
   transition: 0.2s;
   background-color: red;
-};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 35px;
+  text-align: center;
+}
+
+.about {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  color: white;
+  font-size: 13px;
+  position: fixed;
+   color: white; 
+   bottom: 0;
+    left: 0; 
+    right: 0;
+     text-align: center;
+     padding: 0.3em;
+     z-index: 99999;
+}
+
+.about a {
+  color: white;
+  opacity: 0.7;
+  transition: 0.5s;
+}
+
+.about a:hover{
+  opacity: 1;
+}
+
+.logs{
+  font-size: 14px;
+  color: white;
+  padding: 10px 0;
+  
+}
+
+.logs p{
+  line-height: 100%; 
+  margin: 1.3px;
+  transition: 2s;
+  opacity: 0.8;
+}
+
+.logs p span:first-child {
+  font-weight: bold;
+  opacity: 1;
+}
+
+.logs p span:nth-child(2){
+  font-weight: bold;
+  opacity: 1;
+}
 
 .catch_screen {
     width: 100vw;
@@ -465,6 +520,7 @@ h1 {
 .body {
     position: relative;
     z-index: 1;
+    height: 100vh;
 }
 
 
