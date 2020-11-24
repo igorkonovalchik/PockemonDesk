@@ -13,10 +13,6 @@ const character = {
   damageHP: 100,
   elHP: $getElByID('health-character'),
   elProgressbar: $getElByID('progressbar-character'),
-  renderHP: renderHP,
-  renderHPLife: renderHPLife,
-  renderProgressbarHP: renderProgressbarHP,
-  changeHP: changeHP
 };
 
 const enemy = {
@@ -24,12 +20,13 @@ const enemy = {
   defaultHP: 100,
   damageHP: 100,
   elHP: $getElByID('health-enemy'),
-  elProgressbar: $getElByID('progressbar-enemy'),
-  renderHP: renderHP,
-  renderHPLife: renderHPLife,
-  renderProgressbarHP: renderProgressbarHP,
-  changeHP: changeHP
+  elProgressbar: $getElByID('progressbar-enemy')
 };
+
+Object.prototype.renderHP = renderHP;
+Object.prototype.renderHPLife = renderHPLife;
+Object.prototype.renderProgressbarHP = renderProgressbarHP;
+Object.prototype.changeHP = changeHP;
 
 /* ---------- Инит ----------- */ 
 
