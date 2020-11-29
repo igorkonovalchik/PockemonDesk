@@ -16,49 +16,52 @@
              title="Reset Game"
              src="./assets/Pokemon_logo.png"
              alt="Pokemon">
+        <div id="game-count" ></div>
+        <div id="players-scores" ></div>
     </header>
     <div class="playground">
-        <div class="pokemon character">
-            <span class="lvl">Lv. 1</span>
+        <div class="pokemon player1">
+            <span id="lvl-player1" class="lvl"></span>
+            <span id="score-player1" class="scr"></span>
 
-            <img src="http://sify4321.000webhostapp.com/pikachu.png" class="sprite">
+            <img id="img-player1" src="http://sify4321.000webhostapp.com/pikachu.png" class="sprite">
 
             <div class="details">
-                <h2 class="name" id="name-character">
+                <h2 class="name" id="name-player1">
                     Pikachu
                 </h2>
                 <div class="hp">
                     <div class="bar">
-                        <div class="health" id="progressbar-character" style="width: 100%;"></div>
+                        <div class="health" id="progressbar-player1" style="width: 100%;"></div>
                     </div>
-                    <span class="text" id="health-character">100 / 100</span>
+                    <span class="text" id="health-player1">100 / 100</span>
                 </div>
             </div>
         </div>
 
-        <div class="control">
-            <button class="button" id="btn-kick">
-              Thunder Jolt
-            </button>
-            <button class="button" id="btn-uppercut">
-              Iron Fist
-          </button>
+        <div class="remote">
+            <div class="control">
+            </div>
+            <div class="game-control">
+                <button id="resetGame" class="button">Reset Game</button>
+            </div>
         </div>
 
-        <div class="pokemon enemy">
-            <span class="lvl">Lv. 1</span>
+        <div class="pokemon player2">
+            <span id="lvl-player2" class="lvl"></span>
+            <span id="score-player2" class="scr"></span>
 
-            <img src="http://sify4321.000webhostapp.com/charmander.png" class="sprite">
+            <img id="img-player2" src="http://sify4321.000webhostapp.com/charmander.png" class="sprite">
 
             <div class="details">
-                <h2 class="name" id="name-enemy">
+                <h2 class="name" id="name-player2">
                     Charmander
                 </h2>
                 <div class="hp">
                     <div class="bar">
-                        <div class="health" id="progressbar-enemy" style="width: 100%;"></div>
+                        <div class="health" id="progressbar-player2" style="width: 100%;"></div>
                     </div>
-                    <span class="text" id="health-enemy">100 / 100</span>
+                    <span class="text" id="health-player2">100 / 100</span>
                 </div>
             </div>
         </div>

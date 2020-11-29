@@ -1,20 +1,34 @@
 class Selectors {
   constructor(name){
+    this.elLvl = document.getElementById(`lvl-${name}`);
+    this.elName = document.getElementById(`name-${name}`);
+    this.elImg = document.getElementById(`img-${name}`);
     this.elHP = document.getElementById(`health-${name}`);
     this.elProgressbar = document.getElementById(`progressbar-${name}`);
   }
 }
 
 class Pockemon extends Selectors {
-  constructor({name, hp, type, selectors}){    
+  constructor({ name, img, hp, type, selectors, attacks }){
     super(selectors);
     this.name = name;
+    this.img = img;
     this.hp = {
       current: hp,
       total: hp
     }
     this.type = type;
-    this.renderHP();    
+    this.attacks = attacks;
+    this.level = 0;
+    this.renderHP();
+    this.renderPlayerInfo();
+  }
+
+  renderPlayerInfo = () => {
+    const { name, img, level, elName, elImg, elLvl } = this;
+    elName.innerText = name;
+    elLvl.innerText = `Lv. ${level}`;
+    elImg.src = img;
   }
 
   renderHPLife = () => {   
@@ -23,7 +37,7 @@ class Pockemon extends Selectors {
   }
 
   renderProgressbarHP = () => {
-    const { hp: { current, total }, elProgressbar } = this;
+    const { hp: { current, total } } = this;
     const percent = ( current * 100 ) / total; 
     this.elProgressbar.style.width = percent + '%';
   }
@@ -37,12 +51,10 @@ class Pockemon extends Selectors {
       this.hp.current -= count;   
       if (this.hp.current <= 0) {
         this.hp.current = 0;          
-      };
+      }
       this.renderHP();   
       cb && cb(count);
   };
-
-
 
 }
 
