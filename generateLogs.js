@@ -1,7 +1,6 @@
 import { rundom } from './functions.js'
 
 export default (firstPerson, secondPerson, count) => {
-
   const {
     name: firstPersonName,
     hp: { current, total }
@@ -26,23 +25,17 @@ export default (firstPerson, secondPerson, count) => {
   const $logs = document.querySelector('.logs');
   const $p = document.createElement('p');
   $logs.appendChild($p);
-  $p.innerHTML = logs[rundom(logs.length - 1)];
+  $p.innerHTML = logs[rundom(0, logs.length - 1)];
   $logs.insertBefore($p, $logs.children[0]);
 
   const childrenlogs = $logs.children;
   const logsLength = childrenlogs.length;
 
   if (logsLength > 2) {
-    for (let index = 3; index < logsLength; index++) {
-      
-        setTimeout(() => {
-          $logs.children[index].style.opacity = 0;
-        }, 200);
-        setTimeout(() => {
-          if ($logs.children[index].length !== undefined) { $logs.children[index].remove(); };
-        }, 1800);
+    for (let index = 3; index < logsLength - 1; index++) {
+        if( $logs.children[index] !== undefined ) {
+            $logs.children[index].remove();
+        }
       }
-    
-  };
-
-};
+  }
+}
