@@ -1,12 +1,14 @@
-import createRundomPlayer from './createRundomPlayer.js';
 import clickCounter from "./clickCounter.js";
 import {$getElByID, bloodscreen, rundom} from "./functions.js";
 import generateLogs from "./generateLogs.js";
+import Pockemon from "./pockemon.js";
+
+const apiUrl = 'https://reactmarathon-api.netlify.app/api';
 
 class Game {
 
     constructor(){
-        this.player1 = createRundomPlayer('player1');
+        this.player1 = {}; 
         this.player2 = {};
         this.scorePlayer1 = 0;
         this.scorePlayer2 = 0;
@@ -17,7 +19,7 @@ class Game {
     }
 
 
-    resetGameIfPlayerDie = () => {
+    nextGameIfPlayerDie = () => {
         const { player1, player2 } = this;
         if(player1.hp.current === 0 || player2.hp.current === 0) {
             this.countGame += 1;
@@ -25,7 +27,7 @@ class Game {
             $logs.innerHTML = '';
             if (player2.hp.current === 0) {
                 this.scorePlayer1 += 1;
-                this.startGame();
+                this.startGame(false);
             }
             if (player1.hp.current === 0) {
                 this.startNewGame();
@@ -43,15 +45,18 @@ class Game {
         this.countGame = 1;
         this.scorePlayer1 = 0;
         this.scorePlayer2 = 0;
-        this.player1 = createRundomPlayer('player1');
         this.startGame();
     }
 
-    startGame = () => {
+    startGame = async (isFirstGame = true) => {
         bloodscreen(0);
         this.renderScore();
-        this.player2 = createRundomPlayer('player2');
+        if( isFirstGame ){ await this.getPokemon('player1') }; 
+        await this.getPokemon('player2');          
+
         let { player1, player2, countGame } = this;
+
+        console.log(player1);
 
         const $control = document.querySelector('.control');
         const $logs = document.querySelector('.logs');
@@ -75,24 +80,33 @@ class Game {
             const $btn = document.getElementById($btnID);
             $btn.innerText = item.name;
             const btnCounter = clickCounter( $btn, item.maxCount );
-            $btn.addEventListener('click', () => {
-                if(player1.hp.current > 0 && player2.hp.current > 0) {
-                    player2.changeHP(rundom(item.minDamage, item.maxDamage), (count) => {
+            $btn.addEventListener('click', async () => {
+                if(player1.hp.current > 0 && player2.hp.current > 0) {                
+                let kickValue = await this.getKickValue(item.id, 'player2');                  
+                player2.changeHP(kickValue, (count) => {
                         bloodscreen(count, player1.hp.current, player2.hp.current);
                         btnCounter((hitsLeft) => {
                             item.maxCount = hitsLeft;
                         });
-                        this.resetGameIfPlayerDie();
+                        this.nextGameIfPlayerDie();
                         generateLogs(player2, player1, count);
-                    });
-                    if (player2.hp.current > 0){
+                });
+
+
+                if (player2.hp.current > 0){
                         const firstAttackPlayer2 = player2.attacks[0];
-                        player1.changeHP(rundom(firstAttackPlayer2.minDamage, firstAttackPlayer2.maxDamage), (count) => {
+                        kickValue = await this.getKickValue(firstAttackPlayer2.id, 'player1');
+                        console.log(kickValue); 
+                        player1.changeHP(kickValue, (count) => {
                             bloodscreen(count, player1.hp.current, player2.hp.current);
-                            this.resetGameIfPlayerDie();
+                            this.nextGameIfPlayerDie();
                             generateLogs(player2, player1, count);
                         });
-                    }; };
+                  }; 
+
+
+                };
+
             });
 
         })
@@ -104,6 +118,22 @@ class Game {
         });
 
 
+    }
+
+    getPokemon = async (player) => {
+        const response = await fetch(`${apiUrl}/pokemons?random=true`);
+        const pokemon = await response.json(); 
+        this[player] = new Pockemon({
+            ...pokemon,
+            selectors: player
+        });	    
+    }
+
+    getKickValue = async (attackId, player) => {
+        const { player1, player2 } = this;
+        const response = await fetch(`${apiUrl}/fight?player1id=${player1.id}&attackId=${attackId}&player2id=${player2.id}`);
+        const obj = await response.json();
+        return obj.kick[player];    
     }
 }
 
