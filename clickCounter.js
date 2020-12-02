@@ -13,7 +13,8 @@ export default ( hit, maxHit = 10 ) => {
       hit.disabled = true;
       console.log(`Spent all ${ nameButton }. Try another hit. `);
     }
-      cb && cb(hitsLeft);
+     // cb && cb(hitsLeft);
+     cb?.(hitsLeft);
 	}
 
 }
