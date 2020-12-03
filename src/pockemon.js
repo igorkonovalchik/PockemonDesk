@@ -53,8 +53,8 @@ class Pockemon extends Selectors {
       if (this.hp.current <= 0) {
         this.hp.current = 0;          
       }
-      this.renderHP();   
-      cb && cb(count);
+      this.renderHP();      
+      cb?.(count);
   };
 
 }
